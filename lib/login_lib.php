@@ -36,7 +36,12 @@ class LoginLib {
 	}
 	
 	public static function getForwardingPageUrl() {
-		return 'https://' . $_SERVER['HTTP_HOST'] . \OC::$WEBROOT . '/apps/user_shibboleth/login.php';
+		if (isset($_SERVER['SERVER_NAME'])) {
+			$host = $_SERVER['SERVER_NAME'];
+		} else if (isset($_SERVER['HTTP_HOST'])) {
+			$host = $_SERVER['HTTP_HOST'];
+		}
+		return 'https://' . $host . \OC::$WEBROOT . '/apps/user_shibboleth/login.php';
 	}
 	
 	public static function printPage($title, $body) {

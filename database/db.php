@@ -57,13 +57,13 @@ class DB {
 		}
 		$result;
 		if (strlen($partialLoginName) === 0) {
-			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user LIMIT ? OFFSET ?');
-			$result = $query->execute(array($limit, $offset));
+			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user', $limit, $offset); # LIMIT ? OFFSET ?');
+			$result = $query->execute();
 
 		} else {
 			$partialLoginName = '%'.$partialLoginName.'%';
-			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user WHERE login_name LIKE ? LIMIT ? OFFSET ?');
-			$result = $query->execute(array($partialLoginName, $limit, $offset));
+			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user WHERE login_name LIKE ?',$limit, $offset); # LIMIT ? OFFSET ?');
+			$result = $query->execute(array($partialLoginName));
 		}
 		
 		//return result
@@ -86,23 +86,30 @@ class DB {
 		return false;
 	}
 	
-	public static function getDisplayNames($partialDisplayName, $limit, $offset) {
+	public static function getDisplayNames($partialDisplayName, $limit, $offset=0) {
+#\OCP\Util::writeLog( 'user_shibboleth', 'using query with limit & like '.$partialDisplayName, \OCP\Util::ERROR );
 		//prepare and run query
 		if ($limit === 0) {
+#			$limit = 0;
 			$limit = '0';
 		}
-		if ($offset === 0) {
+		if ($offset === 0||$offset==null) {
 			$offset = '0';
 		}
 		$result;
 		if (strlen($partialDisplayName) === 0) {
-			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user LIMIT ? OFFSET ?');
-			$result = $query->execute(array($limit, $offset));
+#			$query = \OC_DB::prepare('SELECT `uid` FROM `*PREFIX*users` WHERE LOWER(`uid`) LIKE LOWER(?)', $limit, $offset);
+
+			$query = \OCP\DB::prepare('SELECT `login_name`, `display_name` FROM *PREFIX*shibboleth_user', $limit, $offset);
+#			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user');
+			$result = $query->execute();
 		}
 		 else {
 			$partialDisplayName = '%'.$partialDisplayName.'%';
-			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user WHERE display_name LIKE ? LIMIT ? OFFSET ?');
-			$result = $query->execute(array($partialDisplayName, $limit, $offset));
+#			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user WHERE display_name LIKE ? LIMIT ? OFFSET ?');
+			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user WHERE display_name LIKE ?',$limit, $offset);
+
+			$result = $query->execute(array($partialDisplayName));
 		}
 		
 		//return result

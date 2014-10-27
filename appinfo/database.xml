@@ -10,7 +10,7 @@
 
   <name>*dbprefix*shibboleth_user</name>
 
-  <description>Contains owncloud uids of shibboleth users that are not mapped to LDAP users.</description>
+<!--  <description>Contains owncloud uids of shibboleth users that are not mapped to LDAP users.</description>-->
 
   <declaration>
 
@@ -20,7 +20,7 @@
     <notnull>true</notnull>
     <length>64</length>
     <default></default>
-    <description>SHA256 hash of the user's salted PersistentID.</description>
+<!--    <description>SHA256 hash of the user's salted PersistentID.</description>-->
    </field>
 
    <field>
@@ -29,7 +29,7 @@
     <notnull>true</notnull>
     <length>64</length>
     <default></default>
-    <description>The user's email address (cropped if neccessary).</description>
+<!--    <description>The user's email address (cropped if neccessary).</description>-->
    </field>
 
    <field>
