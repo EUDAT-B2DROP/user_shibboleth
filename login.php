@@ -81,6 +81,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 		}
 		//perform OC login
 		\OC_User::login($loginName, 'irrelevant');
+		\OCP\Util::writeLog('user_shibboleth', 'Login '.$loginName, \OCP\Util::DEBUG);
 	} else {//not authenticated, yet
 		//follow shibboleth authentication procedure
 		$location = $sessionsHandlerUrl . $sessionInitiatorLocation . '?target=' . \OCA\user_shibboleth\LoginLib::getForwardingPageUrl();

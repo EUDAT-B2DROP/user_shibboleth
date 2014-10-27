@@ -32,6 +32,7 @@ class LdapBackendAdapter {
 	private $connected = false;
 	private $connection;
 	private $ldap;
+	private $access;
 
 
 	function __construct() {
@@ -39,51 +40,16 @@ class LdapBackendAdapter {
                         \OCP\App::isEnabled('user_shibboleth')  && \OCP\App::isEnabled('user_ldap');
 	}
 
-
 	private function connect() {
 		if (!$this->connected) {
-			$this->connection = new \OCA\user_ldap\lib\Connection();
-			$this->ldap = new \OCA\user_ldap\USER_LDAP();
-			$this->ldap->setConnector($this->connection);
+			$this->ldap = new \OCA\user_ldap\lib\LDAP();
+			$this->connection = new \OCA\user_ldap\lib\Connection($this->ldap);
+			$this->access = new \OCA\user_ldap\lib\Access($this->connection, $this->ldap);
 			$this->connected = true;
 		}
 	}
 
-
-	/**
-	 * @brief returns true if and only if a user with the given uuid exists in the LDAP
-	 * @param string a unique user identifier
-	 * @return a boolean value
-	 */
-	public function uuidExists($uuid) {
-		//check backend status
-		if (!$this->enabled) {
-			return false;
-		}
-
-		//check tables
-		$query = \OCP\DB::prepare('SELECT COUNT(*) FROM *PREFIX*ldap_user_mapping WHERE owncloud_name = ?');
-		$result = $query->execute(array($uuid));
-		if (!\OCP\DB::isError($result)) {
-			$count = $result->fetchAll(\PDO::FETCH_COLUMN, 0);
-			if ($count[0] === 1) {
-				return true;
-			}
-                }
-
-		//check primary LDAP server
-		$this->connect();		
-		$filter = $this->connection->ldapUuidAttribute . '=' . $uuid;
-		$result = $this->ldap->fetchListOfUsers($filter, $this->connection->ldapUuidAttribute);
-
-		if (count($result) === 1 && $result[0]['count'] === 1) {
-			return true;
-		}
-		return false;
-	}
-
-
-	public function getUuid($mail) {
+	public function getUuid($attr) {
 		//check backend status
 		if (!$this->enabled) {
 			return false;
@@ -91,32 +57,32 @@ class LdapBackendAdapter {
 		
 		//retrieve UUID from LDAP server
 		$this->connect();
-		$filter = 'mail=' . $mail;
-                $result = $this->ldap->fetchListOfUsers($filter, $this->connection->ldapUuidAttribute);
-
-                if (count($result) === 1 && $result[0]['count'] === 1) {
-                        return $result[0][0];
-                }
-                return false;
+		$linkattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_link_attribute', 'mail');
+		$uuidattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_uuid_attribute', 'dn');
+		$filter = $linkattr . '=' . $attr;
+        $result = $this->access->searchUsers($filter, $uuidattr);
+        if (count($result) === 1) {
+        	return $this->access->dn2username($result[0]);
+        }
+        return false;
 	}
 
-	
-	public function initializeUser($uuid) {
+	public function initializeUser($attr) {
 		//check backend status
-                if (!$this->enabled) {
-                        return false;
+		if (!$this->enabled) {
+			return false;
 		}
-		
+	
+		//retrieve UUID from LDAP server
 		$this->connect();
-		$filter = $this->connection->ldapUuidAttribute . '=' . $uuid;
-		$users = $this->ldap->fetchListOfUsers($filter, 'dn');
-		if (count($users) === 1 && $users[0]['count'] === 1) {
-			$dn = $users[0][0];
-			$this->ldap->dn2ocname($dn);//creates table entries and folders
-			return true;
+		$linkattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_link_attribute', 'mail');
+		$uuidattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_uuid_attribute', 'dn');
+		$filter = $linkattr . '=' . $attr;
+		$result = $this->access->searchUsers($filter, $uuidattr);
+		if (count($result) === 1) {
+			return $this->access->dn2ocname($result[0]);
 		}
 		return false;
 	}
-
 }
 
