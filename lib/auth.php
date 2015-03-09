@@ -22,25 +22,27 @@ namespace OCA\user_shibboleth;
 
 class Auth {
 
+    const SHIB_IDENTITY_PROVIDER = 'HTTP_SHIB_IDENTITY_PROVIDER';
+    const MAIL = 'HTTP_MAIL';
+    const EPPN = 'HTTP_EPPN';
 	//can be used to check if shibboleth authentication has taken place
 	public static function getShibIdentityProvider() {
-		if (isset($_SERVER['Shib-Identity-Provider']) &&
-			$_SERVER['Shib-Identity-Provider'] !== '') {
-			return $_SERVER['Shib-Identity-Provider'];
+		if (isset($_SERVER[Auth::SHIB_IDENTITY_PROVIDER]) &&
+			$_SERVER[Auth::SHIB_IDENTITY_PROVIDER] !== '') {
+			return $_SERVER[Auth::SHIB_IDENTITY_PROVIDER];
 		}
 		return false;
 	}
 	
 	public static function getMail() {//used by login.php
-		$attr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_link_attribute', 'mail');
-    	if (isset($_SERVER[$attr]) && $_SERVER[$attr] !== '')
-        	return $_SERVER[$attr];
+    	if (isset($_SERVER[Auth::MAIL]) && $_SERVER[Auth::MAIL] !== '')
+        	return $_SERVER[Auth::MAIL];
         return false;
     }
 	
     public static function getPersistentId() {//used by login.php
-        if (isset($_SERVER['eppn']) && $_SERVER['eppn'] !== '')
-            return $_SERVER['eppn'];
+        if (isset($_SERVER[Auth::EPPN]) && $_SERVER[Auth::EPPN] !== '')
+            return $_SERVER[Auth::EPPN];
         return false;
     }
 

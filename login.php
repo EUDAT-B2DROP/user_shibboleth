@@ -1,7 +1,7 @@
 <?php
 /**
  * ownCloud - user_shibboleth
- * 
+ *
  * Copyright (C) 2013 Andreas Ergenzinger andreas.ergenzinger@uni-konstanz.de
  *
  * This library is free software: you can redistribute it and/or modify
@@ -22,9 +22,18 @@ require_once '../../lib/base.php';
 
 $location = \OC::$WEBROOT;
 
+function kill($data){
+    echo "<pre>";
+    die(var_dump($data));
+    echo "</pre>";
+}
+
 $enabled = \OCP\App::isEnabled('user_shibboleth');
 $sessionsHandlerUrl = \OCP\Config::getAppValue('user_shibboleth', 'sessions_handler_url', '');
+syslog("user shibboleth enabled? $enabled");
+//syslog("sessionsHandlerUrl is $sessionsHandlerUrl");
 $sessionInitiatorLocation = \OCP\Config::getAppValue('user_shibboleth', 'session_initiator_location', '');
+
 if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') {//enabled and hopefully configured
 
 	//see if user is authenticated via shibboleth
@@ -32,7 +41,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 	if ($idp) {
 		$persistentId = \OCA\user_shibboleth\Auth::getPersistentId();
 		$mail = \OCA\user_shibboleth\Auth::getMail();
-		
+
 		//exit if attributes weren't retrieved
 		if ($persistentId === false || $mail === false) {
 			$msg = 'unavailable attributes: ';
@@ -53,7 +62,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 			\OCA\user_shibboleth\LoginLib::printPage('Domain Mismatch', 'The domain of your identity provider does not match the domain part of your email address. This event has been logged.');
 			exit();
 		}
-		
+
 		//distinguish between internal (those in the LDAP) and external Shibboleth users
 		$adapter = new \OCA\user_shibboleth\LdapBackendAdapter();
 		$loginName = $adapter->getUuid($mail);
@@ -90,4 +99,4 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 	\OCP\Util::writeLog('user_shibboleth', 'backend not enabled or not configured', \OCP\Util::INFO);
 }
 header('Location: ' .  $location);
-?> 
+?>
