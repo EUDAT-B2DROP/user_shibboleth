@@ -1,6 +1,6 @@
 #user_shibboleth
 
-**user_shibboleth** is an ownCloud (version 5.0) user authentication app relying on the Shibboleth Service Provider. This app is no longer maintained, so compatibility with more recent ownCloud versions is very unlikely.
+**user_shibboleth** is an ownCloud user authentication app relying on the Shibboleth Service Provider.
 
 At the current stage, this project is only intended to serve as a starting point for reimplementation and as an example for federated authentication in a PHP + Apache + mod_shib + Shibboleth2 environment, in general.
 
@@ -39,7 +39,7 @@ Assuming a running configuration of Apache and the Shibboleth SP, some additiona
     
     While you have the _shibboleth2.xml_ file open, write down the values of both the _handlerURL_ attribute of the _Sessions_ node and the _Location_ attribute of the _SessionInitiator_ node, as these must be specified on the app's settings menu.
 
-   The app requires two user attributes, _persistent-id_ and _mail_, so make sure that the nodes with those ids are uncommented in _/etc/shibboleth/attribute-map.xml_. 
+   The app requires two user attributes, _auEduSharedPersonToken_ and _mail_, so make sure that the nodes with those ids are uncommented in _/etc/shibboleth/attribute-map.xml_. 
 
 The __user_shibboleth__ app itself can be installed and enabled just like any other ownCloud app.
 

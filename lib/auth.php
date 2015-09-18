@@ -25,6 +25,8 @@ class Auth {
     const SHIB_IDENTITY_PROVIDER = 'HTTP_SHIB_IDENTITY_PROVIDER';
     const MAIL = 'HTTP_MAIL';
     const EPPN = 'HTTP_EPPN';
+    const TOKEN = 'HTTP_AUEDUPERSONSHAREDTOKEN';
+    const DN = 'HTTP_DISPLAYNAME';
 	//can be used to check if shibboleth authentication has taken place
 	public static function getShibIdentityProvider() {
 		if (isset($_SERVER[Auth::SHIB_IDENTITY_PROVIDER]) &&
@@ -41,8 +43,8 @@ class Auth {
     }
 	
     public static function getPersistentId() {//used by login.php
-        if (isset($_SERVER[Auth::EPPN]) && $_SERVER[Auth::EPPN] !== '')
-            return $_SERVER[Auth::EPPN];
+        if (isset($_SERVER[Auth::TOKEN]) && $_SERVER[Auth::TOKEN] !== '')
+            return $_SERVER[Auth::TOKEN];
         return false;
     }
 
