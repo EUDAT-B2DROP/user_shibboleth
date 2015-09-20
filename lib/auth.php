@@ -22,11 +22,11 @@ namespace OCA\user_shibboleth;
 
 class Auth {
 
-    const SHIB_IDENTITY_PROVIDER = 'HTTP_SHIB_IDENTITY_PROVIDER';
-    const MAIL = 'HTTP_MAIL';
-    const EPPN = 'HTTP_EPPN';
-    const TOKEN = 'HTTP_AUEDUPERSONSHAREDTOKEN';
-    const DN = 'HTTP_DISPLAYNAME';
+    const SHIB_IDENTITY_PROVIDER = 'Shib-Identity-Provider';
+    const MAIL = 'mail';
+    const EPPN = 'eppn';
+    const TOKEN = 'auEduPersonSharedToken';
+    const DN = 'displayName';
 	//can be used to check if shibboleth authentication has taken place
 	public static function getShibIdentityProvider() {
 		if (isset($_SERVER[Auth::SHIB_IDENTITY_PROVIDER]) &&
