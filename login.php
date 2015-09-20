@@ -20,7 +20,7 @@
 
 require_once '../../lib/base.php';
 
-$location = \OC::$WEBROOT;
+$location = \OC::$WEBROOT . "/index.php/apps/files/";
 
 function kill($data){
     echo "<pre>";
