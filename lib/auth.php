@@ -47,5 +47,11 @@ class Auth {
             return $_SERVER[Auth::TOKEN];
         return false;
     }
+    
+    public static function getDisplayName() {
+        if (isset($_SERVER[Auth::DN]) && $_SERVER[Auth::DN] != '')
+            return $_SERVER[Auth::DN];
+        return false;
+    }
 
 }

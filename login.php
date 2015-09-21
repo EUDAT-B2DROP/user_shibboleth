@@ -41,6 +41,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 	if ($idp) {
 		$persistentId = \OCA\user_shibboleth\Auth::getPersistentId();
 		$mail = \OCA\user_shibboleth\Auth::getMail();
+		$dn = \OCA\user_shibboleth\Auth::getDisplayName();
 
 		//exit if attributes weren't retrieved
 		if ($persistentId === false || $mail === false) {

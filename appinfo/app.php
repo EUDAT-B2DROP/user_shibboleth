@@ -22,6 +22,7 @@ require_once OC_App::getAppPath('user_shibboleth') . '/appinfo/bootstrap.php';
 
 
 OCP\App::registerAdmin('user_shibboleth', 'settings');
+OCP\App::registerPersonal('user_shibboleth', 'personal');
 
 // register user backend
 OC_User::useBackend(new OCA\user_shibboleth\UserShibboleth());

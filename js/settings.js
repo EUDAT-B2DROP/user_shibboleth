@@ -17,5 +17,18 @@ $(document).ready(function() {
 			$(hiddenElementId).attr('value', '0');
 		}
 	});
+	
+	$("#user_shibboleth_personal_submit").click(function() {
+		$.post('', {
+			password:$("#user_shibboleth_personal_password").val()
+			},
+			function() {
+				alert("Password set successfully");
+			}
+		).fail(function() {
+			alert("Error: Unable to set password");
+		});
+		return false;
+	});
 
 });
