@@ -76,7 +76,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 			}
 			//make sure that user entry exists in oc_shibboleth_user
 			$loginName = \OCA\user_shibboleth\LoginLib::persistentId2LoginName($persistentId);
-			$displayName = $mail;
+			$displayName = $dn;
 
 			if (\OCA\user_shibboleth\DB::loginNameExists($loginName)) {
 				//update display name if it has changed since last login

@@ -26,7 +26,8 @@ class Auth {
     const MAIL = 'mail';
     const EPPN = 'eppn';
     const TOKEN = 'auEduPersonSharedToken';
-    const DN = 'displayName';
+    const DN = 'cn';
+
 	//can be used to check if shibboleth authentication has taken place
 	public static function getShibIdentityProvider() {
 		if (isset($_SERVER[Auth::SHIB_IDENTITY_PROVIDER]) &&
