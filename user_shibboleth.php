@@ -103,6 +103,10 @@ class UserShibboleth extends \OC_User_Backend {
 		return DB::getDisplayNames($search, $limit, $offset);
 	}
 	
+	public function deleteUser($uid) {
+		return DB::deleteUser($uid);
+	}
+
 	/**
 	 * @brief update a user's quota
 	 * @param uid the login name of an external Shibboleth user 
