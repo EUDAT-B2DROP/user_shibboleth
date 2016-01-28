@@ -87,6 +87,8 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 				//create a new user account
 				$homeDir = \OCA\user_shibboleth\LoginLib::getHomeDirPath($loginName);
 				\OCA\user_shibboleth\DB::addUser($loginName, $displayName, $homeDir);
+				// Set email
+				\OC::$server->getConfig()->setUserValue($loginName, 'settings', 'email', $mail);
 			}
 		}
 		//perform OC login
