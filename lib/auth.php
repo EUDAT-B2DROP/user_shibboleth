@@ -44,8 +44,8 @@ class Auth {
     }
 	
     public static function getPersistentId() {//used by login.php
-        if (isset($_SERVER[Auth::TOKEN]) && $_SERVER[Auth::TOKEN] !== '')
-            return $_SERVER[Auth::TOKEN];
+        if (isset($_SERVER[Auth::EPPN]) && $_SERVER[Auth::EPPN] !== '')
+            return $_SERVER[Auth::EPPN];
         return false;
     }
     
