@@ -30,28 +30,26 @@ class Auth {
 
 	//can be used to check if shibboleth authentication has taken place
 	public static function getShibIdentityProvider() {
-		if (isset($_SERVER[Auth::SHIB_IDENTITY_PROVIDER]) &&
-			$_SERVER[Auth::SHIB_IDENTITY_PROVIDER] !== '') {
-			return $_SERVER[Auth::SHIB_IDENTITY_PROVIDER];
-		}
+		if (isset($_SERVER[self::SHIB_IDENTITY_PROVIDER]) && $_SERVER[self::SHIB_IDENTITY_PROVIDER] !== '')
+			return $_SERVER[self::SHIB_IDENTITY_PROVIDER];
 		return false;
 	}
 	
 	public static function getMail() {//used by login.php
-    	if (isset($_SERVER[Auth::MAIL]) && $_SERVER[Auth::MAIL] !== '')
-        	return $_SERVER[Auth::MAIL];
+    	if (isset($_SERVER[self::MAIL]) && $_SERVER[self::MAIL] !== '')
+        	return $_SERVER[self::MAIL];
         return false;
     }
 	
     public static function getPersistentId() {//used by login.php
-        if (isset($_SERVER[Auth::EPPN]) && $_SERVER[Auth::EPPN] !== '')
-            return $_SERVER[Auth::EPPN];
+        if (isset($_SERVER[self::EPPN]) && $_SERVER[self::EPPN] !== '')
+            return $_SERVER[self::EPPN];
         return false;
     }
     
     public static function getDisplayName() {
-        if (isset($_SERVER[Auth::DN]) && $_SERVER[Auth::DN] != '')
-            return $_SERVER[Auth::DN];
+        if (isset($_SERVER[self::DN]) && $_SERVER[self::DN] != '')
+            return $_SERVER[self::DN];
         return false;
     }
 
