@@ -70,10 +70,6 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 		if ($loginName) {//user is internal, backends are enabled, and user mapping is active
 			$adapter->initializeUser($loginName);
 		} else {//user is external
-			//crop $mail to fit into display_name column of oc_shibboleth_user
-			if (strlen($mail) > 64) {
-				$mail = substr($mail, 0, 64);
-			}
 			//make sure that user entry exists in oc_shibboleth_user
 			$loginName = \OCA\user_shibboleth\LoginLib::persistentId2LoginName($persistentId);
 			$displayName = $dn;
