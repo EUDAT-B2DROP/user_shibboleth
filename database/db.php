@@ -87,7 +87,7 @@ class DB {
 	}
 	
 	public static function getDisplayNames($partialDisplayName, $limit, $offset=0) {
-#\OCP\Util::writeLog( 'user_shibboleth', 'using query with limit & like '.$partialDisplayName, \OCP\Util::ERROR );
+#		\OCP\Util::writeLog(APP_NAME, 'using query with limit & like ' . $partialDisplayName, \OCP\Util::ERROR);
 		//prepare and run query
 		if ($limit === 0) {
 #			$limit = 0;

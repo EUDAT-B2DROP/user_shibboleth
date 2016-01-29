@@ -18,11 +18,12 @@
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once OC_App::getAppPath('user_shibboleth') . '/appinfo/bootstrap.php';
+const APP_NAME = 'user_shibboleth';
 
+require_once OC_App::getAppPath(APP_NAME) . '/appinfo/bootstrap.php';
 
-OCP\App::registerAdmin('user_shibboleth', 'settings');
-OCP\App::registerPersonal('user_shibboleth', 'personal');
+OCP\App::registerAdmin(APP_NAME, 'settings');
+OCP\App::registerPersonal(APP_NAME, 'personal');
 
 // register user backend
 OC_User::useBackend(new OCA\user_shibboleth\UserShibboleth());
@@ -31,14 +32,14 @@ OC_User::useBackend(new OCA\user_shibboleth\UserShibboleth());
 $entry = array(
 	'id' => 'user_shibboleth_settings',
 	'order'=>1,
-	'href' => OCP\Util::linkTo( 'user_shibboleth', 'settings.php' ),
+	'href' => OCP\Util::linkTo(APP_NAME, 'settings.php'),
 	'name' => 'Shibboleth Authentication'
 );
 
 //add login button
 $link = OCA\user_shibboleth\LoginLib::getForwardingPageUrl();
 $buttonText = 'Shibboleth';
-$federationName = OCP\Config::getAppValue('user_shibboleth', 'federation_name', '');
+$federationName = OCP\Config::getAppValue(APP_NAME, 'federation_name', '');
 if ($federationName !== '') {
 	$buttonText .= ' – ' . $federationName;
 }

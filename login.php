@@ -28,11 +28,11 @@ function kill($data){
     echo "</pre>";
 }
 
-$enabled = \OCP\App::isEnabled('user_shibboleth');
-$sessionsHandlerUrl = \OCP\Config::getAppValue('user_shibboleth', 'sessions_handler_url', '');
-\OCP\Util::writeLog('user_shibboleth', "user shibboleth enabled? $enabled", \OCP\Util::DEBUG);
-\OCP\Util::writeLog('user_shibboleth', "sessionsHandlerUrl is $sessionsHandlerUrl", \OCP\Util::DEBUG);
-$sessionInitiatorLocation = \OCP\Config::getAppValue('user_shibboleth', 'session_initiator_location', '');
+$enabled = \OCP\App::isEnabled(APP_NAME);
+$sessionsHandlerUrl = \OCP\Config::getAppValue(APP_NAME, 'sessions_handler_url', '');
+\OCP\Util::writeLog(APP_NAME, "user shibboleth enabled? $enabled", \OCP\Util::DEBUG);
+\OCP\Util::writeLog(APP_NAME, "sessionsHandlerUrl is $sessionsHandlerUrl", \OCP\Util::DEBUG);
+$sessionInitiatorLocation = \OCP\Config::getAppValue(APP_NAME, 'session_initiator_location', '');
 
 if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') {//enabled and hopefully configured
 
@@ -50,16 +50,16 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 				$msg .= 'persistentID ';
 			if ($mail === false)
 				$msg .= 'mail';
-			\OCP\Util::writeLog('user_shibboleth', $msg, \OCP\Util::ERROR);
+			\OCP\Util::writeLog(APP_NAME, $msg, \OCP\Util::ERROR);
 			\OCA\user_shibboleth\LoginLib::printPage('Attributes unavailable',
 			'Some attributes could not be retrieved from the identity provider.<p/><a href="' . \OC::$WEBROOT . '">Return to the login page</a>');
 			exit();
 		}
 
 		//check for potential email address spoofing
-		if ((\OCP\Config::getAppValue('user_shibboleth', 'enforce_domain_similarity', '0') === '1') && !\OCA\user_shibboleth\LoginLib::checkMailOrigin($idp, $mail)) {
+		if ((\OCP\Config::getAppValue(APP_NAME, 'enforce_domain_similarity', '0') === '1') && !\OCA\user_shibboleth\LoginLib::checkMailOrigin($idp, $mail)) {
 			//log and print error page
-			\OCP\Util::writeLog('user_shibboleth', 'domain mismatch: ' . $idp . ' ' . $mail, \OCP\Util::ERROR);
+			\OCP\Util::writeLog(APP_NAME, 'domain mismatch: ' . $idp . ' ' . $mail, \OCP\Util::ERROR);
 			\OCA\user_shibboleth\LoginLib::printPage('Domain Mismatch', 'The domain of your identity provider does not match the domain part of your email address. This event has been logged.');
 			exit();
 		}
@@ -89,13 +89,13 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 		}
 		//perform OC login
 		\OC_User::login($loginName, 'irrelevant');
-		\OCP\Util::writeLog('user_shibboleth', 'Login '.$loginName, \OCP\Util::DEBUG);
+		\OCP\Util::writeLog(APP_NAME, 'Login ' . $loginName, \OCP\Util::DEBUG);
 	} else {//not authenticated, yet
 		//follow shibboleth authentication procedure
 		$location = $sessionsHandlerUrl . $sessionInitiatorLocation . '?target=' . \OCA\user_shibboleth\LoginLib::getForwardingPageUrl();
 	}
 } else {
-	\OCP\Util::writeLog('user_shibboleth', 'backend not enabled or not configured', \OCP\Util::INFO);
+	\OCP\Util::writeLog(APP_NAME, 'backend not enabled or not configured', \OCP\Util::INFO);
 }
 header('Location: ' .  $location);
 ?>

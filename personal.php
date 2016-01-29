@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-  
+
 if($_POST) {
 	$username = \OC_User::getDisplayName();
 	$password = $_POST['password'];
@@ -38,10 +38,10 @@ if($_POST) {
 	}
 }
 
-OCP\Util::addStyle('user_shibboleth', 'settings');
-OCP\Util::addScript('user_shibboleth', 'settings');
+OCP\Util::addStyle(APP_NAME, 'settings');
+OCP\Util::addScript(APP_NAME, 'settings');
 
 // fill template
-$tmpl = new OCP\Template( 'user_shibboleth', 'personal');
+$tmpl = new OCP\Template(APP_NAME, 'personal');
 
 return $tmpl->fetchPage();

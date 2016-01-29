@@ -102,7 +102,7 @@ class UserShibboleth extends \OC_User_Backend {
 	public function getDisplayNames($search = '', $limit = null, $offset = null) {
 		return DB::getDisplayNames($search, $limit, $offset);
 	}
-	
+
 	public function deleteUser($uid) {
 		return DB::deleteUser($uid);
 	}
@@ -112,7 +112,7 @@ class UserShibboleth extends \OC_User_Backend {
 	 * @param uid the login name of an external Shibboleth user 
 	 */
 	private static function updateQuota($uid) {
-		$quota = \OCP\Config::getAppValue('user_shibboleth', 'external_user_quota', '');
+		$quota = \OCP\Config::getAppValue(APP_NAME, 'external_user_quota', '');
 		if ($quota !== '') {
 			\OCP\Config::setUserValue($uid, 'files', 'quota', \OCP\Util::computerFileSize($quota));
 		}

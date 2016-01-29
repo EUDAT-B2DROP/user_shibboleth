@@ -36,8 +36,8 @@ class LdapBackendAdapter {
 
 
 	function __construct() {
-		$this->enabled = (\OCP\Config::getAppValue('user_shibboleth', 'link_to_ldap_backend', '0') === '1') &&
-                        \OCP\App::isEnabled('user_shibboleth')  && \OCP\App::isEnabled('user_ldap');
+		$this->enabled = (\OCP\Config::getAppValue(APP_NAME, 'link_to_ldap_backend', '0') === '1') &&
+			\OCP\App::isEnabled(APP_NAME) && \OCP\App::isEnabled('user_ldap');
 	}
 
 	private function connect() {
@@ -63,8 +63,8 @@ class LdapBackendAdapter {
 		
 		//retrieve UUID from LDAP server
 		$this->connect();
-		$linkattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_link_attribute', 'mail');
-		$uuidattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_uuid_attribute', 'dn');
+		$linkattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_link_attribute', 'mail');
+		$uuidattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn');
 		$filter = $linkattr . '=' . $attr;
         $result = $this->access->searchUsers($filter, $uuidattr);
         if (count($result) === 1) {
@@ -81,8 +81,8 @@ class LdapBackendAdapter {
 	
 		//retrieve UUID from LDAP server
 		$this->connect();
-		$linkattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_link_attribute', 'mail');
-		$uuidattr = \OCP\Config::getAppValue('user_shibboleth', 'ldap_uuid_attribute', 'dn');
+		$linkattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_link_attribute', 'mail');
+		$uuidattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn');
 		$filter = $linkattr . '=' . $attr;
 		$result = $this->access->searchUsers($filter, $uuidattr);
 		if (count($result) === 1) {
