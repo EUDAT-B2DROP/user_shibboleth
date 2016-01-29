@@ -30,8 +30,8 @@ function kill($data){
 
 $enabled = \OCP\App::isEnabled('user_shibboleth');
 $sessionsHandlerUrl = \OCP\Config::getAppValue('user_shibboleth', 'sessions_handler_url', '');
-syslog("user shibboleth enabled? $enabled");
-//syslog("sessionsHandlerUrl is $sessionsHandlerUrl");
+\OCP\Util::writeLog('user_shibboleth', "user shibboleth enabled? $enabled", \OCP\Util::DEBUG);
+\OCP\Util::writeLog('user_shibboleth', "sessionsHandlerUrl is $sessionsHandlerUrl", \OCP\Util::DEBUG);
 $sessionInitiatorLocation = \OCP\Config::getAppValue('user_shibboleth', 'session_initiator_location', '');
 
 if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') {//enabled and hopefully configured
