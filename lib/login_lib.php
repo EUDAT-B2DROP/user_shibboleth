@@ -42,6 +42,8 @@ class LoginLib {
 			$host = $_SERVER['SERVER_NAME'];
 		} else if (isset($_SERVER['HTTP_HOST'])) {
 			$host = $_SERVER['HTTP_HOST'];
+		} else {
+			$host = '';
 		}
 		return 'https://' . $host . \OC::$WEBROOT . '/apps/user_shibboleth/login.php';
 	}
