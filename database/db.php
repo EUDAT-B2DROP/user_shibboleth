@@ -27,7 +27,7 @@ class DB {
 		$result = $query->execute(array($loginName));
 		
 		if (!\OCP\DB::isError($result)) {
-			$count = $result->fetchAll(\PDO::FETCH_COLUMN, 0); 
+			$count = $result->fetchAll(\PDO::FETCH_COLUMN);
 			return $count[0] == 1;//not all PHP/DBS combinations return result of type integer
 		}
 		return false;
@@ -39,7 +39,7 @@ class DB {
                 $result = $query->execute(array($loginName));
 
                 if (!\OCP\DB::isError($result)) {
-                        $homeDirectories = $result->fetchAll(\PDO::FETCH_COLUMN, 0);
+                        $homeDirectories = $result->fetchAll(\PDO::FETCH_COLUMN);
                         if (count($homeDirectories) === 1)
                                 return $homeDirectories[0];
                 }
@@ -70,7 +70,7 @@ class DB {
 		if (\OCP\DB::isError($result)) {
 			return false;
 		} else {
-			return $result->fetchAll(\PDO::FETCH_COLUMN, 0);
+			return $result->fetchAll(\PDO::FETCH_COLUMN);
 		}
 	}
 	
@@ -79,7 +79,7 @@ class DB {
 		$result = $query->execute(array($loginName));
 		
 		if (!\OCP\DB::isError($result)) {
-			$displayNames = $result->fetchAll(\PDO::FETCH_COLUMN, 0);
+			$displayNames = $result->fetchAll(\PDO::FETCH_COLUMN);
 			if (count($displayNames) === 1)
 				return $displayNames[0];
 		}
