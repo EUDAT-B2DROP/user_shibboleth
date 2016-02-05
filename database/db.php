@@ -1,7 +1,7 @@
 <?php
 /**
  * ownCloud - user_shibboleth
- * 
+ *
  * Copyright (C) 2013 Andreas Ergenzinger andreas.ergenzinger@uni-konstanz.de
  *
  * This library is free software: you can redistribute it and/or modify
@@ -25,15 +25,15 @@ class DB {
 	public static function loginNameExists($loginName) {
 		$query = \OCP\DB::prepare('SELECT COUNT(*) FROM *PREFIX*shibboleth_user WHERE login_name = ?');
 		$result = $query->execute(array($loginName));
-		
+
 		if (!\OCP\DB::isError($result)) {
 			$count = $result->fetchAll(\PDO::FETCH_COLUMN);
 			return $count[0] == 1;//not all PHP/DBS combinations return result of type integer
 		}
 		return false;
 	}
-	
-	
+
+
 	public static function getHomeDir($loginName) {
 		$query = \OCP\DB::prepare('SELECT home_dir FROM *PREFIX*shibboleth_user WHERE login_name = ?');
                 $result = $query->execute(array($loginName));
@@ -45,8 +45,8 @@ class DB {
                 }
                 return false;
 	}
-	
-	
+
+
 	public static function getLoginNames($partialLoginName, $limit, $offset) {//was getUsers
 		//prepare and run query
 		if ($limit === 0) {
@@ -57,15 +57,14 @@ class DB {
 		}
 
 		if (strlen($partialLoginName) === 0) {
-			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user', $limit, $offset); # LIMIT ? OFFSET ?');
+			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user', $limit, $offset); // LIMIT ? OFFSET ?');
 			$result = $query->execute();
-
 		} else {
 			$partialLoginName = '%'.$partialLoginName.'%';
-			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user WHERE login_name LIKE ?',$limit, $offset); # LIMIT ? OFFSET ?');
+			$query = \OCP\DB::prepare('SELECT login_name FROM *PREFIX*shibboleth_user WHERE login_name LIKE ?',$limit, $offset); // LIMIT ? OFFSET ?');
 			$result = $query->execute(array($partialLoginName));
 		}
-		
+
 		//return result
 		if (\OCP\DB::isError($result)) {
 			return false;
@@ -77,7 +76,7 @@ class DB {
 	public static function getDisplayName($loginName) {
 		$query = \OCP\DB::prepare('SELECT display_name FROM *PREFIX*shibboleth_user WHERE login_name = ?');
 		$result = $query->execute(array($loginName));
-		
+
 		if (!\OCP\DB::isError($result)) {
 			$displayNames = $result->fetchAll(\PDO::FETCH_COLUMN);
 			if (count($displayNames) === 1)
@@ -87,10 +86,10 @@ class DB {
 	}
 
 	public static function getDisplayNames($partialDisplayName, $limit, $offset=0) {
-#		\OCP\Util::writeLog(APP_NAME, 'using query with limit & like ' . $partialDisplayName, \OCP\Util::ERROR);
+//		\OCP\Util::writeLog(APP_NAME, 'using query with limit & like ' . $partialDisplayName, \OCP\Util::ERROR);
 		//prepare and run query
 		if ($limit === 0) {
-#			$limit = 0;
+//			$limit = 0;
 			$limit = '0';
 		}
 		if ($offset === 0||$offset==null) {
@@ -98,20 +97,20 @@ class DB {
 		}
 
 		if (strlen($partialDisplayName) === 0) {
-#			$query = \OC_DB::prepare('SELECT `uid` FROM `*PREFIX*users` WHERE LOWER(`uid`) LIKE LOWER(?)', $limit, $offset);
+//			$query = \OC_DB::prepare('SELECT `uid` FROM `*PREFIX*users` WHERE LOWER(`uid`) LIKE LOWER(?)', $limit, $offset);
 
 			$query = \OCP\DB::prepare('SELECT `login_name`, `display_name` FROM *PREFIX*shibboleth_user', $limit, $offset);
-#			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user');
+//			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user');
 			$result = $query->execute();
 		}
 		 else {
 			$partialDisplayName = '%'.$partialDisplayName.'%';
-#			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user WHERE display_name LIKE ? LIMIT ? OFFSET ?');
+//			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user WHERE display_name LIKE ? LIMIT ? OFFSET ?');
 			$query = \OCP\DB::prepare('SELECT login_name, display_name FROM *PREFIX*shibboleth_user WHERE display_name LIKE ?',$limit, $offset);
 
 			$result = $query->execute(array($partialDisplayName));
 		}
-		
+
 		//return result
 		if (!\OCP\DB::isError($result)) {
 			$rows = $result->fetchAll(\PDO::FETCH_ASSOC);
