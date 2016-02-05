@@ -20,7 +20,7 @@
 
 require_once '../../lib/base.php';
 
-$location = \OC::$WEBROOT . "/index.php/apps/files/";
+$location = \OC::$server->getWebRoot() . "/index.php/apps/files/";
 
 $enabled = \OCP\App::isEnabled(APP_NAME);
 $sessionsHandlerUrl = \OCP\Config::getAppValue(APP_NAME, 'sessions_handler_url', '');
@@ -46,7 +46,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 				$msg .= 'mail';
 			\OCP\Util::writeLog(APP_NAME, $msg, \OCP\Util::ERROR);
 			\OCA\user_shibboleth\LoginLib::printPage('Attributes unavailable',
-			'Some attributes could not be retrieved from the identity provider.<p/><a href="' . \OC::$WEBROOT . '">Return to the login page</a>');
+			'Some attributes could not be retrieved from the identity provider.<p/><a href="' . \OC::$server->getWebRoot() . '">Return to the login page</a>');
 			exit();
 		}
 

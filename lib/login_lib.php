@@ -45,7 +45,7 @@ class LoginLib {
 		} else {
 			$host = '';
 		}
-		return 'https://' . $host . \OC::$WEBROOT . '/apps/user_shibboleth/login.php';
+		return 'https://' . $host . \OC::$server->getWebRoot() . '/apps/user_shibboleth/login.php';
 	}
 
 	public static function printPage($title, $body) {
@@ -55,13 +55,12 @@ class LoginLib {
 	public static function printAutoLoginPage($user) {
 		$user = \OCP\Util::sanitizeHTML($user);
 		$title = 'Forwarding to ownCloud login page';
-		$body = '<form id="auto_login_form" action="' . \OC::$WEBROOT . '/index.php" method="post" enctype="application/x-www-form-urlencoded" target="_self" ><input type="hidden" id="user" name="user" value="' . $user . '"/><input type="hidden" id="password" name="password" value="irrelevant"/><noscript><input type="submit" name="login" value="Log in" /></noscript></form><script type="text/javascript" >document.getElementById("auto_login_form").submit();</script>';
+		$body = '<form id="auto_login_form" action="' . \OC::$server->getWebRoot() . '/index.php" method="post" enctype="application/x-www-form-urlencoded" target="_self" ><input type="hidden" id="user" name="user" value="' . $user . '"/><input type="hidden" id="password" name="password" value="irrelevant"/><noscript><input type="submit" name="login" value="Log in" /></noscript></form><script type="text/javascript" >document.getElementById("auto_login_form").submit();</script>';
 		self::printPage($title, $body);
 	}
 
 	public static function getHomeDirPath($loginName) {
-		return \OC::$SERVERROOT . '/data/' . self::SHIB_USER_HOME_FOLDER_NAME
-			. '/' . $loginName;
+		return \OC::$SERVERROOT . '/data/' . self::SHIB_USER_HOME_FOLDER_NAME . '/' . $loginName;
 	}
 
 	public static function persistentId2LoginName($persistentId) {
