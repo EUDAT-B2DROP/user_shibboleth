@@ -22,12 +22,6 @@ require_once '../../lib/base.php';
 
 $location = \OC::$WEBROOT . "/index.php/apps/files/";
 
-function kill($data){
-    echo "<pre>";
-    die(var_dump($data));
-    echo "</pre>";
-}
-
 $enabled = \OCP\App::isEnabled(APP_NAME);
 $sessionsHandlerUrl = \OCP\Config::getAppValue(APP_NAME, 'sessions_handler_url', '');
 \OCP\Util::writeLog(APP_NAME, "user shibboleth enabled? $enabled", \OCP\Util::DEBUG);
