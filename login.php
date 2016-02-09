@@ -28,16 +28,17 @@ $sessionsHandlerUrl = \OCP\Config::getAppValue(APP_NAME, 'sessions_handler_url',
 \OCP\Util::writeLog(APP_NAME, "sessionsHandlerUrl is $sessionsHandlerUrl", \OCP\Util::DEBUG);
 $sessionInitiatorLocation = \OCP\Config::getAppValue(APP_NAME, 'session_initiator_location', '');
 
-if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') {//enabled and hopefully configured
+if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') {
+	// Enabled and hopefully configured
 
-	//see if user is authenticated via shibboleth
+	// See if user is authenticated via shibboleth
 	$idp = \OCA\user_shibboleth\Auth::getShibIdentityProvider();
 	if ($idp) {
 		$persistentId = \OCA\user_shibboleth\Auth::getPersistentId();
 		$mail = \OCA\user_shibboleth\Auth::getMail();
 		$dn = \OCA\user_shibboleth\Auth::getDisplayName();
 
-		//exit if attributes weren't retrieved
+		// Exit if attributes weren't retrieved
 		if ($persistentId === false || $mail === false) {
 			$msg = 'unavailable attributes: ';
 			if ($persistentId === false)
@@ -46,50 +47,53 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 				$msg .= 'mail';
 			\OCP\Util::writeLog(APP_NAME, $msg, \OCP\Util::ERROR);
 			\OCA\user_shibboleth\LoginLib::printPage('Attributes unavailable',
-			'Some attributes could not be retrieved from the identity provider.<p/><a href="' . \OC::$server->getWebRoot() . '">Return to the login page</a>');
+				'Some attributes could not be retrieved from the identity provider.<p/><a href="' . \OC::$server->getWebRoot() . '">Return to the login page</a>');
 			exit();
 		}
 
-		//check for potential email address spoofing
+		// Check for potential email address spoofing
 		if ((\OCP\Config::getAppValue(APP_NAME, 'enforce_domain_similarity', '0') === '1') && !\OCA\user_shibboleth\LoginLib::checkMailOrigin($idp, $mail)) {
-			//log and print error page
+			// Log and print error page
 			\OCP\Util::writeLog(APP_NAME, 'domain mismatch: ' . $idp . ' ' . $mail, \OCP\Util::ERROR);
 			\OCA\user_shibboleth\LoginLib::printPage('Domain Mismatch', 'The domain of your identity provider does not match the domain part of your email address. This event has been logged.');
 			exit();
 		}
 
-		//distinguish between internal (those in the LDAP) and external Shibboleth users
+		// Distinguish between internal (those in the LDAP) and external Shibboleth users
 		$adapter = new \OCA\user_shibboleth\LdapBackendAdapter();
 		$loginName = $adapter->getUuid($mail);
-		if ($loginName) {//user is internal, backends are enabled, and user mapping is active
+		if ($loginName) {
+			// User is internal, backends are enabled, and user mapping is active
 			$adapter->initializeUser($loginName);
-		} else {//user is external
-			//make sure that user entry exists in oc_shibboleth_user
+		} else {
+			// User is external
+			// Make sure that user entry exists in oc_shibboleth_user
 			$loginName = \OCA\user_shibboleth\LoginLib::persistentId2LoginName($persistentId);
 			$displayName = $dn;
 
 			if (\OCA\user_shibboleth\DB::loginNameExists($loginName)) {
-				//update display name if it has changed since last login
+				// Update display name if it has changed since last login
 				if ($displayName !== \OCA\user_shibboleth\DB::getDisplayName($loginName)) {
 					\OCA\user_shibboleth\DB::updateDisplayName($loginName, $displayName);
 				}
 			} else {
-				//create a new user account
+				// Create a new user account
 				$homeDir = \OCA\user_shibboleth\LoginLib::getHomeDirPath($loginName);
 				\OCA\user_shibboleth\DB::addUser($loginName, $displayName, $homeDir);
 				// Set email
 				\OC::$server->getConfig()->setUserValue($loginName, 'settings', 'email', $mail);
 			}
 		}
-		//perform OC login
+
+		// Perform OC login
 		\OC_User::login($loginName, 'irrelevant');
 		\OCP\Util::writeLog(APP_NAME, 'Login ' . $loginName, \OCP\Util::DEBUG);
-	} else {//not authenticated, yet
-		//follow shibboleth authentication procedure
+	} else {
+		// Not authenticated, yet
+		// Follow Shibboleth authentication procedure
 		$location = $sessionsHandlerUrl . $sessionInitiatorLocation . '?target=' . \OCA\user_shibboleth\LoginLib::getForwardingPageUrl();
 	}
 } else {
-	\OCP\Util::writeLog(APP_NAME, 'backend not enabled or not configured', \OCP\Util::INFO);
+	\OCP\Util::writeLog(APP_NAME, 'Backend not enabled or not configured', \OCP\Util::INFO);
 }
-header('Location: ' .  $location);
-?>
+header('Location: ' . $location);
