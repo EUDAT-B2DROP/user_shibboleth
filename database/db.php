@@ -126,27 +126,28 @@ class DB {
 	}
 
 	public static function addUser($loginName, $displayName, $homeDir) {
-		$query = \OCP\DB::prepare('INSERT INTO *PREFIX*shibboleth_user values(?, ?, ?)');
+		$query = \OC::$server->getDatabaseConnection()->prepare('INSERT INTO *PREFIX*shibboleth_user values(?, ?, ?)');
 		$result = $query->execute(array($loginName, $displayName, $homeDir));
-                if (\OCP\DB::isError($result))//does not prevent errors!
+
+		if ($result === false)
 			return false;
 		return true;
 	}
 
 	public static function updateDisplayName($loginName, $displayName) {
-		$query = \OCP\DB::prepare('UPDATE *PREFIX*shibboleth_user SET display_name = ? WHERE login_name = ?');
+		$query = \OC::$server->getDatabaseConnection()->prepare('UPDATE *PREFIX*shibboleth_user SET display_name = ? WHERE login_name = ?');
 		$result = $query->execute(array($displayName, $loginName));
-		if (\OCP\DB::isError($result))
+		if ($result === false)
 			return false;
 		return true;
 	}
 
 	public static function deleteUser($loginName) {
-		$query = \OCP\DB::prepare('DELETE FROM *PREFIX*shibboleth_user WHERE login_name = ?');
-                $result = $query->execute(array($loginName));
-                if (\OCP\DB::isError($result))
-                        return false;
-                return true;
+		$query = \OC::$server->getDatabaseConnection()->prepare('DELETE FROM *PREFIX*shibboleth_user WHERE login_name = ?');
+		$result = $query->execute(array($loginName));
+		if ($result === false)
+			return false;
+		return true;
 	}
 
 }
