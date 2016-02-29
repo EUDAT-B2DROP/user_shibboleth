@@ -1,7 +1,7 @@
 <?php
 /**
  * ownCloud - user_shibboleth
- * 
+ *
  * Copyright (C) 2013 Andreas Ergenzinger andreas.ergenzinger@uni-konstanz.de
  *
  * This library is free software: you can redistribute it and/or modify
@@ -27,7 +27,7 @@ class UserShibboleth extends \OC_User_Backend {
 			OC_USER_BACKEND_GET_HOME |
 			OC_USER_BACKEND_GET_DISPLAYNAME;
 	}
-	
+
 	/**
 	 * @brief Check if the password is correct
 	 * @param $uid The username
@@ -40,14 +40,16 @@ class UserShibboleth extends \OC_User_Backend {
 
 		if (Auth::getShibIdentityProvider() && $password === 'irrelevant') {
 
-			//distinguish between internal and external Shibboleth users
-			//internal users log in with their LDAP (entry)uuid,
+			// Distinguish between internal and external Shibboleth users
+
+			// Internal users log in with their LDAP (entry) uuid,
 			$adapter = new LdapBackendAdapter();
 			$mail = Auth::getMail();
 			if (($mail !== false) && ($adapter->getUuid($mail) === $uid)) {
 				return $uid;
 			}
-			//external users log in with their hashed persistentID
+
+			// External users log in with their hashed persistentID
 			$persistentId = Auth::getPersistentId();
 			$loginName = LoginLib::persistentId2LoginName($persistentId);
 			if ($loginName === $uid) {
@@ -78,14 +80,14 @@ class UserShibboleth extends \OC_User_Backend {
 	 * @return boolean
 	 */
 	public function userExists($uid) {
-		//block the shibboleth users' home directory
+		// Block the shibboleth users' home directory
 		if (LoginLib::SHIB_USER_HOME_FOLDER_NAME === $uid) {
 			return true;
 		}
-		return DB::loginNameExists($uid); 
-		//all other cases are handled by the LDAP app's userExists() method
+		return DB::loginNameExists($uid);
+		// All other cases are handled by the LDAP app's userExists() method
 	}
-	
+
 	/**
 	 * @brief get the user's home directory
 	 * @param string $uid the username
@@ -94,22 +96,23 @@ class UserShibboleth extends \OC_User_Backend {
 	public function getHome($uid) {
 		return DB::getHomeDir($uid);
 	}
-	
+
 	public function getDisplayName($uid) {
 		return DB::getDisplayName($uid);
 	}
-	
+
 	public function getDisplayNames($search = '', $limit = null, $offset = null) {
 		return DB::getDisplayNames($search, $limit, $offset);
 	}
 
 	public function deleteUser($uid) {
+		// TODO: Delete files as well
 		return DB::deleteUser($uid);
 	}
 
 	/**
 	 * @brief update a user's quota
-	 * @param uid the login name of an external Shibboleth user 
+	 * @param uid the login name of an external Shibboleth user
 	 */
 	private static function updateQuota($uid) {
 		$quota = \OCP\Config::getAppValue(APP_NAME, 'external_user_quota', '');
@@ -117,5 +120,5 @@ class UserShibboleth extends \OC_User_Backend {
 			\OCP\Config::setUserValue($uid, 'files', 'quota', \OCP\Util::computerFileSize($quota));
 		}
 	}
-		
+
 }
