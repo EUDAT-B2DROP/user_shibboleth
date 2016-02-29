@@ -125,9 +125,16 @@ class DB {
 		return false;
 	}
 
-	public static function addUser($loginName, $displayName, $homeDir) {
-		$query = \OC::$server->getDatabaseConnection()->prepare('INSERT INTO *PREFIX*shibboleth_user values(?, ?, ?)');
-		$result = $query->execute(array($loginName, $displayName, $homeDir));
+	public static function addUser($loginName, $displayName, $homeDir, $eppn) {
+		if (self::loginNameExists($loginName)) {
+			\OCP\Util::writeLog(APP_NAME, "re-adding user: $loginName", \OCP\Util::INFO);
+			$query = \OC::$server->getDatabaseConnection()->prepare('UPDATE *PREFIX*shibboleth_user SET deleted_on = "" WHERE login_name = ?');
+			$result = $query->execute(array($loginName));
+		} else {
+			\OCP\Util::writeLog(APP_NAME, "adding user: $loginName", \OCP\Util::INFO);
+			$query = \OC::$server->getDatabaseConnection()->prepare('INSERT INTO *PREFIX*shibboleth_user values(?, ?, ?, ?, datetime("now"), "")');
+			$result = $query->execute(array($loginName, $displayName, $homeDir, $eppn));
+		}
 
 		if ($result === false)
 			return false;
@@ -135,6 +142,7 @@ class DB {
 	}
 
 	public static function updateDisplayName($loginName, $displayName) {
+		\OCP\Util::writeLog(APP_NAME, "renaming user: $loginName -> $displayName", \OCP\Util::INFO);
 		$query = \OC::$server->getDatabaseConnection()->prepare('UPDATE *PREFIX*shibboleth_user SET display_name = ? WHERE login_name = ?');
 		$result = $query->execute(array($displayName, $loginName));
 		if ($result === false)
@@ -143,7 +151,8 @@ class DB {
 	}
 
 	public static function deleteUser($loginName) {
-		$query = \OC::$server->getDatabaseConnection()->prepare('DELETE FROM *PREFIX*shibboleth_user WHERE login_name = ?');
+		\OCP\Util::writeLog(APP_NAME, "deleting user: $loginName", \OCP\Util::INFO);
+		$query = \OC::$server->getDatabaseConnection()->prepare('UPDATE *PREFIX*shibboleth_user SET deleted_on = datetime("now") WHERE login_name = ?');
 		$result = $query->execute(array($loginName));
 		if ($result === false)
 			return false;
