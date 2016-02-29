@@ -19,7 +19,7 @@
     <type>text</type>
     <notnull>true</notnull>
     <length>64</length>
-    <default></default>
+    <default/>
 <!--    <description>SHA256 hash of the user's salted PersistentID.</description>-->
    </field>
 
@@ -28,7 +28,7 @@
     <type>text</type>
     <notnull>true</notnull>
     <length>64</length>
-    <default></default>
+    <default/>
 <!--    <description>The user's email address (cropped if neccessary).</description>-->
    </field>
 
@@ -37,7 +37,29 @@
     <type>text</type>
     <notnull>true</notnull>
     <length>128</length>
-    <default></default>
+    <default/>
+   </field>
+
+   <field>
+    <name>eppn</name>
+    <type>text</type>
+    <notnull>true</notnull>
+    <length>128</length>
+    <default/>
+   </field>
+
+   <field>
+    <name>created_on</name>
+    <type>datetime</type>
+    <notnull>true</notnull>
+    <default/>
+   </field>
+
+   <field>
+    <name>deleted_on</name>
+    <type>datetime</type>
+    <notnull>false</notnull>
+    <default/>
    </field>
 
    <index>
@@ -50,10 +72,10 @@
    </index>
 
    <index>
-    <name>shibboleth_display_name_index</name>
+    <name>shibboleth_eppn_index</name>
     <unique>true</unique>
     <field>
-     <name>display_name</name>
+     <name>eppn</name>
      <sorting>ascending</sorting>
     </field>
    </index>
