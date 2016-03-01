@@ -1,7 +1,7 @@
 <?php
 /**
  * ownCloud - user_shibboleth
- * 
+ *
  * Copyright (C) 2013 Andreas Ergenzinger andreas.ergenzinger@uni-konstanz.de
  *
  * This library is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 namespace OCA\user_shibboleth;
 
 class LoginLib {
-	
+
 	const SHIB_USER_HOME_FOLDER_NAME = 'shibboleth';
 
 	public static function endsWith($string, $suffix, $caseInsensitive = true) {
@@ -34,7 +34,7 @@ class LoginLib {
 		}
 		return false;
 	}
-	
+
 	public static function getForwardingPageUrl() {
         if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
             $host = $_SERVER['HTTP_X_FORWARDED_HOST'];
@@ -45,7 +45,7 @@ class LoginLib {
 		}
 		return 'https://' . $host . \OC::$WEBROOT . '/apps/user_shibboleth/login.php';
 	}
-	
+
 	public static function printPage($title, $body) {
 		echo '<!DOCTYPE html><html><head><meta charset="utf-8" /><title>' . $title . '</title></head><body>' . $body . '</body></html>';
 	}
@@ -54,21 +54,21 @@ class LoginLib {
 		$user = \OCP\Util::sanitizeHTML($user);
 		$title = 'Forwarding to ownCloud login page';
 		$body = '<form id="auto_login_form" action="' . \OC::$WEBROOT . '/index.php" method="post" enctype="application/x-www-form-urlencoded" target="_self" ><input type="hidden" id="user" name="user" value="' . $user . '"/><input type="hidden" id="password" name="password" value="irrelevant"/><noscript><input type="submit" name="login" value="Log in" /></noscript></form><script type="text/javascript" >document.getElementById("auto_login_form").submit();</script>';
-		self::printPage($title, $body);	
+		self::printPage($title, $body);
 	}
-		
-	public static function getHomeDirPath($loginName) {		
+
+	public static function getHomeDirPath($loginName) {
 		return \OC::$SERVERROOT . '/data/' . self::SHIB_USER_HOME_FOLDER_NAME
 			. '/' . $loginName;
 	}
-	
+
 	public static function persistentId2LoginName($persistentId) {
-                return hash('sha256', $persistentId);
+		return hash('sha256', $persistentId);
 	}
-	
+
 	/**
 	 * Compares the IdP's domain with the mail address domain part and
-	 * returns false iff they don't match.
+	 * returns false if they don't match.
 	 */
 	public static function checkMailOrigin($idp, $mail) {
 		//trim the idp URL down to the domain part:
@@ -96,4 +96,3 @@ class LoginLib {
 		return self::endsWith($idpDomain, $mailDomain, false);
 	}
 }
-
