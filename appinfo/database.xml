@@ -40,14 +40,16 @@
     <default/>
    </field>
 
+   <!-- Persistent ID -->
    <field>
-    <name>eppn</name>
+    <name>pid</name>
     <type>text</type>
     <notnull>true</notnull>
     <length>128</length>
     <default/>
    </field>
 
+   <!-- Timestamp containing creation time -->
    <field>
     <name>created_on</name>
     <type>datetime</type>
@@ -55,6 +57,7 @@
     <default/>
    </field>
 
+   <!-- Timestamp containing deletion time -->
    <field>
     <name>deleted_on</name>
     <type>datetime</type>
@@ -72,10 +75,10 @@
    </index>
 
    <index>
-    <name>shibboleth_eppn_index</name>
+    <name>shibboleth_pid_index</name>
     <unique>true</unique>
     <field>
-     <name>eppn</name>
+     <name>pid</name>
      <sorting>ascending</sorting>
     </field>
    </index>

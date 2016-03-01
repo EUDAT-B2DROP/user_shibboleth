@@ -125,7 +125,7 @@ class DB {
 		return false;
 	}
 
-	public static function addUser($loginName, $displayName, $homeDir, $eppn) {
+	public static function addUser($loginName, $displayName, $homeDir, $pid) {
 		if (self::loginNameExists($loginName)) {
 			\OCP\Util::writeLog(APP_NAME, "re-adding user: $loginName", \OCP\Util::INFO);
 			$query = \OC::$server->getDatabaseConnection()->prepare('UPDATE *PREFIX*shibboleth_user SET deleted_on = "" WHERE login_name = ?');
@@ -133,7 +133,7 @@ class DB {
 		} else {
 			\OCP\Util::writeLog(APP_NAME, "adding user: $loginName", \OCP\Util::INFO);
 			$query = \OC::$server->getDatabaseConnection()->prepare('INSERT INTO *PREFIX*shibboleth_user values(?, ?, ?, ?, datetime("now"), "")');
-			$result = $query->execute(array($loginName, $displayName, $homeDir, $eppn));
+			$result = $query->execute(array($loginName, $displayName, $homeDir, $pid));
 		}
 
 		if ($result === false)

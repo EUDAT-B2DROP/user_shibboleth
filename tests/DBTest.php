@@ -19,23 +19,23 @@ class DBTest extends PHPUnit_Framework_TestCase {
 		self::$userX = array(
 			'LoginName' => 'MisterX',
 			'DisplayName' => 'Mister X',
-			'EPPN' => 'mister.x@example.com',
+			'PID' => 'mister.x@example.com',
 			'HomeDir' => '/dev/null/shibboleth/MisterX');
 		self::$userY = array(
 			'LoginName' => 'MisterY',
 			'DisplayName' => 'Mister Y',
-			'EPPN' => 'mister.y@example.com',
+			'PID' => 'mister.y@example.com',
 			'HomeDir' => '/dev/null/shibboleth/MisterY');
 		self::$userZ = array(
 			'LoginName' => 'MisterZ',
 			'DisplayName' => 'Mister Z',
-			'EPPN' => 'mister.z@example.com',
+			'PID' => 'mister.z@example.com',
 			'HomeDir' => '/dev/null/shibboleth/MisterZ');
 
 		// In case tearDownAfter was not called due to error
 		self::cleanUpDatabase();
 
-		DB::addUser(self::$userX['LoginName'], self::$userX['DisplayName'], self::$userX['HomeDir'], self::$userX['EPPN']);
+		DB::addUser(self::$userX['LoginName'], self::$userX['DisplayName'], self::$userX['HomeDir'], self::$userX['PID']);
 	}
 
 	public static function tearDownAfterClass() {
@@ -43,10 +43,10 @@ class DBTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testAddUser() {
-		$outcome = DB::addUser(self::$userY['LoginName'], self::$userY['DisplayName'], self::$userY['HomeDir'], self::$userY['EPPN']);
+		$outcome = DB::addUser(self::$userY['LoginName'], self::$userY['DisplayName'], self::$userY['HomeDir'], self::$userY['PID']);
 		$this->assertTrue($outcome);
 
-		$outcome = DB::addUser(self::$userZ['LoginName'], self::$userZ['DisplayName'], self::$userZ['HomeDir'], self::$userZ['EPPN']);
+		$outcome = DB::addUser(self::$userZ['LoginName'], self::$userZ['DisplayName'], self::$userZ['HomeDir'], self::$userZ['PID']);
 		$this->assertTrue($outcome);
 	}
 
@@ -58,7 +58,7 @@ class DBTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testReAddingUser() {
-		$outcome = DB::addUser(self::$userZ['LoginName'], self::$userZ['DisplayName'], self::$userZ['HomeDir'], self::$userZ['EPPN']);
+		$outcome = DB::addUser(self::$userZ['LoginName'], self::$userZ['DisplayName'], self::$userZ['HomeDir'], self::$userZ['PID']);
 		$this->assertTrue($outcome);
 	}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * ownCloud - user_shibboleth
- * 
+ *
  * Copyright (C) 2013 Andreas Ergenzinger andreas.ergenzinger@uni-konstanz.de
  *
  * This library is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ class Auth {
 
     const SHIB_IDENTITY_PROVIDER = 'Shib-Identity-Provider';
     const MAIL = 'mail';
-    const EPPN = 'eppn';
+    const PID = 'eppn';
     const TOKEN = 'auEduPersonSharedToken';
     const DN = 'cn';
 
@@ -34,19 +34,19 @@ class Auth {
 			return $_SERVER[self::SHIB_IDENTITY_PROVIDER];
 		return false;
 	}
-	
+
 	public static function getMail() {//used by login.php
     	if (isset($_SERVER[self::MAIL]) && $_SERVER[self::MAIL] !== '')
         	return $_SERVER[self::MAIL];
         return false;
     }
-	
+
     public static function getPersistentId() {//used by login.php
-        if (isset($_SERVER[self::EPPN]) && $_SERVER[self::EPPN] !== '')
-            return $_SERVER[self::EPPN];
+        if (isset($_SERVER[self::PID]) && $_SERVER[self::PID] !== '')
+            return $_SERVER[self::PID];
         return false;
     }
-    
+
     public static function getDisplayName() {
         if (isset($_SERVER[self::DN]) && $_SERVER[self::DN] != '')
             return $_SERVER[self::DN];
