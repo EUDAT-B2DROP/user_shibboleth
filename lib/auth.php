@@ -21,36 +21,26 @@
 namespace OCA\user_shibboleth;
 
 class Auth {
-
-    const SHIB_IDENTITY_PROVIDER = 'Shib-Identity-Provider';
-    const MAIL = 'mail';
-    const EPPN = 'eppn';
-    const TOKEN = 'auEduPersonSharedToken';
-    const DN = 'cn';
-
-	//can be used to check if shibboleth authentication has taken place
-	public static function getShibIdentityProvider() {
-		if (isset($_SERVER[self::SHIB_IDENTITY_PROVIDER]) && $_SERVER[self::SHIB_IDENTITY_PROVIDER] !== '')
-			return $_SERVER[self::SHIB_IDENTITY_PROVIDER];
+	private static function getAttribute($name) {
+		$attributeName = \OCP\Config::getAppValue('user_shibboleth', $name, '');
+		if (isset($attributeName) && $attributeName !== '' && isset($_SERVER[$attributeName]) && $_SERVER[$attributeName] !== '')
+			return $_SERVER[$attributeName];
 		return false;
 	}
-	
-	public static function getMail() {//used by login.php
-    	if (isset($_SERVER[self::MAIL]) && $_SERVER[self::MAIL] !== '')
-        	return $_SERVER[self::MAIL];
-        return false;
-    }
-	
-    public static function getPersistentId() {//used by login.php
-        if (isset($_SERVER[self::EPPN]) && $_SERVER[self::EPPN] !== '')
-            return $_SERVER[self::EPPN];
-        return false;
-    }
-    
-    public static function getDisplayName() {
-        if (isset($_SERVER[self::DN]) && $_SERVER[self::DN] != '')
-            return $_SERVER[self::DN];
-        return false;
-    }
 
+	public static function getShibIdentityProvider() {
+		return Auth::getAttribute('identity_provider');
+	}
+
+	public static function getMail() {//used by login.php
+		return Auth::getAttribute('mail_attr');
+	}
+
+	public static function getPersistentId() {//used by login.php
+		return Auth::getAttribute('persistent_id_attr');
+	}
+
+	public static function getDisplayName() {//used by login.php
+		return Auth::getAttribute('full_name_attr');
+	}
 }
