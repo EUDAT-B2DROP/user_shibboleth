@@ -22,7 +22,7 @@ OC_Util::checkAdminUser();
 OCP\Util::addStyle(APP_NAME, 'settings');
 OCP\Util::addScript(APP_NAME, 'settings');
 
-$params = array('sessions_handler_url', 'session_initiator_location', 'federation_name', 'enforce_domain_similarity', 'link_to_ldap_backend', 'ldap_link_attribute', 'ldap_uuid_attribute', 'external_user_quota');
+$params = array('identity_provider', 'mail_attr', 'persistent_id_attr', 'full_name_attr', 'sessions_handler_url', 'session_initiator_location', 'federation_name', 'enforce_domain_similarity', 'link_to_ldap_backend', 'ldap_link_attribute', 'ldap_uuid_attribute', 'external_user_quota');
   
 if($_POST) {
 	foreach($params as $param) {
@@ -33,14 +33,18 @@ if($_POST) {
 }
 
 // fill template
-$tmpl = new OCP\Template(APP_NAME, 'settings');
-$tmpl->assign('sessions_handler_url', OCP\Config::getAppValue(APP_NAME, 'sessions_handler_url', ''));
-$tmpl->assign('session_initiator_location', OCP\Config::getAppValue(APP_NAME, 'session_initiator_location', ''));
-$tmpl->assign('federation_name', OCP\Config::getAppValue(APP_NAME, 'federation_name', ''));
-$tmpl->assign('enforce_domain_similarity', OCP\Config::getAppValue(APP_NAME, 'enforce_domain_similarity', '1'));
-$tmpl->assign('link_to_ldap_backend', OCP\Config::getAppValue(APP_NAME, 'link_to_ldap_backend', '0'));
-$tmpl->assign('ldap_link_attribute', OCP\Config::getAppValue(APP_NAME, 'ldap_link_attribute', 'mail'));
-$tmpl->assign('ldap_uuid_attribute', OCP\Config::getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn'));
-$tmpl->assign('external_user_quota', OCP\Config::getAppValue(APP_NAME, 'external_user_quota', ''));
+$tmpl = new OCP\Template( 'user_shibboleth', 'settings');
+$tmpl->assign('sessions_handler_url', OCP\Config::getAppValue('user_shibboleth', 'sessions_handler_url', '/Shibboleth.sso'));
+$tmpl->assign('session_initiator_location', OCP\Config::getAppValue('user_shibboleth', 'session_initiator_location', '/Login'));
+$tmpl->assign('federation_name', OCP\Config::getAppValue('user_shibboleth', 'federation_name', ''));
+$tmpl->assign('enforce_domain_similarity', OCP\Config::getAppValue('user_shibboleth', 'enforce_domain_similarity', '1'));
+$tmpl->assign('link_to_ldap_backend', OCP\Config::getAppValue('user_shibboleth', 'link_to_ldap_backend', '0'));
+$tmpl->assign('ldap_link_attribute', OCP\Config::getAppValue('user_shibboleth', 'ldap_link_attribute', 'mail'));
+$tmpl->assign('ldap_uuid_attribute', OCP\Config::getAppValue('user_shibboleth', 'ldap_uuid_attribute', 'dn'));
+$tmpl->assign('external_user_quota', OCP\Config::getAppValue('user_shibboleth', 'external_user_quota', ''));
+$tmpl->assign('identity_provider', OCP\Config::getAppValue('user_shibboleth', 'identity_provider', 'Shib-Identity-Provider'));
+$tmpl->assign('mail_attr', OCP\Config::getAppValue('user_shibboleth', 'mail_attr', 'mail'));
+$tmpl->assign('persistent_id_attr', OCP\Config::getAppValue('user_shibboleth', 'persistent_id_attr', 'eppn'));
+$tmpl->assign('full_name_attr', OCP\Config::getAppValue('user_shibboleth', 'full_name_attr', 'cn'));
 
 return $tmpl->fetchPage();
