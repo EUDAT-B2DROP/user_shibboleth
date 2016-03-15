@@ -20,26 +20,26 @@
 
 const APP_NAME = 'user_shibboleth';
 
-require_once OC_App::getAppPath(APP_NAME) . '/appinfo/bootstrap.php';
+require_once __DIR__.'/bootstrap.php';
 
 OCP\App::registerAdmin(APP_NAME, 'settings');
 OCP\App::registerPersonal(APP_NAME, 'personal');
 
 // register user backend
-OC_User::useBackend(new OCA\user_shibboleth\UserShibboleth());
+\OC::$server->getUserManager()->registerBackend(new OCA\user_shibboleth\UserShibboleth());
 
 // add settings page to navigation
 $entry = array(
 	'id' => 'user_shibboleth_settings',
 	'order'=>1,
-	'href' => OCP\Util::linkTo(APP_NAME, 'settings.php'),
+	'href' => \OC::$server->getURLGenerator()->linkTo(APP_NAME, 'settings.php'),
 	'name' => 'Shibboleth Authentication'
 );
 
 //add login button
 $link = OCA\user_shibboleth\LoginLib::getForwardingPageUrl();
 $buttonText = 'Shibboleth';
-$federationName = OCP\Config::getAppValue(APP_NAME, 'federation_name', '');
+$federationName = \OC::$server->getConfig()->getAppValue(APP_NAME, 'federation_name', '');
 if ($federationName !== '') {
 	$buttonText .= ' – ' . $federationName;
 }

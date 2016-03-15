@@ -22,7 +22,7 @@ namespace OCA\user_shibboleth;
 
 class Auth {
 	private static function getAttribute($name) {
-		$attributeName = \OCP\Config::getAppValue('user_shibboleth', $name, '');
+		$attributeName = \OC::$server->getConfig()->getAppValue('user_shibboleth', $name, '');
 		if (isset($attributeName) && $attributeName !== '' && isset($_SERVER[$attributeName]) && $_SERVER[$attributeName] !== '')
 			return $_SERVER[$attributeName];
 		return false;

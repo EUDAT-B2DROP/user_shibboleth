@@ -7,6 +7,7 @@
 	<licence>GNU GPLv3</licence>
 	<author>Andreas Ergenzinger</author>
 	<require>5.0</require>
+	<version>0.5.0.2</version>
 	<types>
 		<prelogin/>
 		<authentication/>
