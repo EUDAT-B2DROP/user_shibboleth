@@ -36,7 +36,7 @@ class LdapBackendAdapter {
 
 
 	function __construct() {
-		$this->enabled = (\OCP\Config::getAppValue(APP_NAME, 'link_to_ldap_backend', '0') === '1') &&
+		$this->enabled = (\OC::$server->getConfig()->getAppValue(APP_NAME, 'link_to_ldap_backend', '0') === '1') &&
 			\OCP\App::isEnabled(APP_NAME) && \OCP\App::isEnabled('user_ldap');
 	}
 
@@ -64,8 +64,8 @@ class LdapBackendAdapter {
 		
 		//retrieve UUID from LDAP server
 		$this->connect();
-		$linkattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_link_attribute', 'mail');
-		$uuidattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn');
+		$linkattr = \OC::$server->getConfig()->getAppValue(APP_NAME, 'ldap_link_attribute', 'mail');
+		$uuidattr = \OC::$server->getConfig()->getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn');
 		$filter = $linkattr . '=' . $attr;
         $result = $this->access->searchUsers($filter, $uuidattr);
         if (count($result) === 1) {
@@ -82,8 +82,8 @@ class LdapBackendAdapter {
 	
 		//retrieve UUID from LDAP server
 		$this->connect();
-		$linkattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_link_attribute', 'mail');
-		$uuidattr = \OCP\Config::getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn');
+		$linkattr = \OC::$server->getConfig()->getAppValue(APP_NAME, 'ldap_link_attribute', 'mail');
+		$uuidattr = \OC::$server->getConfig()->getAppValue(APP_NAME, 'ldap_uuid_attribute', 'dn');
 		$filter = $linkattr . '=' . $attr;
 		$result = $this->access->searchUsers($filter, $uuidattr);
 		if (count($result) === 1) {

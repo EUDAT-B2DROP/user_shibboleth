@@ -115,9 +115,9 @@ class UserShibboleth extends \OC_User_Backend {
 	 * @param uid the login name of an external Shibboleth user
 	 */
 	private static function updateQuota($uid) {
-		$quota = \OCP\Config::getAppValue(APP_NAME, 'external_user_quota', '');
+		$quota = \OC::$server->getConfig()->getAppValue(APP_NAME, 'external_user_quota', '');
 		if ($quota !== '') {
-			\OCP\Config::setUserValue($uid, 'files', 'quota', \OCP\Util::computerFileSize($quota));
+			\OC::$server->getConfig()->setUserValue($uid, 'files', 'quota', \OCP\Util::computerFileSize($quota));
 		}
 	}
 

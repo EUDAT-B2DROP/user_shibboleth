@@ -23,10 +23,10 @@ require_once '../../lib/base.php';
 $location = \OC::$server->getWebRoot() . "/index.php/apps/files/";
 
 $enabled = \OCP\App::isEnabled(APP_NAME);
-$sessionsHandlerUrl = \OCP\Config::getAppValue(APP_NAME, 'sessions_handler_url', '');
+$sessionsHandlerUrl = \OC::$server->getConfig()->getAppValue(APP_NAME, 'sessions_handler_url', '');
 \OCP\Util::writeLog(APP_NAME, "user shibboleth enabled? $enabled", \OCP\Util::DEBUG);
 \OCP\Util::writeLog(APP_NAME, "sessionsHandlerUrl is $sessionsHandlerUrl", \OCP\Util::DEBUG);
-$sessionInitiatorLocation = \OCP\Config::getAppValue(APP_NAME, 'session_initiator_location', '');
+$sessionInitiatorLocation = \OC::$server->getConfig()->getAppValue(APP_NAME, 'session_initiator_location', '');
 
 if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') {
 	// Enabled and hopefully configured
@@ -52,7 +52,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 		}
 
 		// Check for potential email address spoofing
-		if ((\OCP\Config::getAppValue(APP_NAME, 'enforce_domain_similarity', '0') === '1') && !\OCA\user_shibboleth\LoginLib::checkMailOrigin($idp, $mail)) {
+		if ((\OC::$server->getConfig()->getAppValue(APP_NAME, 'enforce_domain_similarity', '0') === '1') && !\OCA\user_shibboleth\LoginLib::checkMailOrigin($idp, $mail)) {
 			// Log and print error page
 			\OCP\Util::writeLog(APP_NAME, 'domain mismatch: ' . $idp . ' ' . $mail, \OCP\Util::ERROR);
 			\OCA\user_shibboleth\LoginLib::printPage('Domain Mismatch', 'The domain of your identity provider does not match the domain part of your email address. This event has been logged.');
@@ -86,7 +86,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 		}
 
 		// Perform OC login
-		\OC_User::login($loginName, 'irrelevant');
+		\OC::$server->getUserSession()->login($loginName, 'irrelevant');
 		\OCP\Util::writeLog(APP_NAME, 'Login ' . $loginName, \OCP\Util::DEBUG);
 	} else {
 		// Not authenticated, yet
