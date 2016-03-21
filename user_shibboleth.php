@@ -23,9 +23,10 @@ namespace OCA\user_shibboleth;
 class UserShibboleth extends \OC_User_Backend {
 
 	public function getSupportedActions() {
-		return OC_USER_BACKEND_CHECK_PASSWORD |
-			OC_USER_BACKEND_GET_HOME |
-			OC_USER_BACKEND_GET_DISPLAYNAME;
+		return 
+			\OC_User_Backend::CHECK_PASSWORD |
+			\OC_User_Backend::GET_HOME |
+			\OC_User_Backend::GET_DISPLAYNAME;
 	}
 
 	/**
@@ -106,7 +107,6 @@ class UserShibboleth extends \OC_User_Backend {
 	}
 
 	public function deleteUser($uid) {
-		// TODO: Delete files as well
 		return DB::deleteUser($uid);
 	}
 

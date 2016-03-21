@@ -1,7 +1,7 @@
 <?php
 /**
  * ownCloud - user_shibboleth
- * 
+ *
  * Copyright (C) 2013 Andreas Ergenzinger andreas.ergenzinger@uni-konstanz.de
  *
  * This library is free software: you can redistribute it and/or modify
@@ -17,9 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace OCA\user_shibboleth;
-
 class Auth {
 	private static function getAttribute($name) {
 		$attributeName = \OC::$server->getConfig()->getAppValue('user_shibboleth', $name, '');

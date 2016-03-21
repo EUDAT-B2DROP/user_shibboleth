@@ -79,7 +79,7 @@ if ($enabled && $sessionsHandlerUrl !== '' && $sessionInitiatorLocation !== '') 
 			} else {
 				// Create a new user account
 				$homeDir = \OCA\user_shibboleth\LoginLib::getHomeDirPath($loginName);
-				\OCA\user_shibboleth\DB::addUser($loginName, $displayName, $homeDir);
+				\OCA\user_shibboleth\DB::addUser($loginName, $displayName, $homeDir, OCA\user_shibboleth\Auth::getPersistentId());
 				// Set email
 				\OC::$server->getConfig()->setUserValue($loginName, 'settings', 'email', $mail);
 			}
